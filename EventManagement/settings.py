@@ -143,8 +143,8 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        # CHANGED THIS LINE: Removes strict manifest mapping checks
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        # CHANGED THIS LINE: Tells WhiteNoise to serve files directly without zipping them during build time
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
 STATIC_URL = '/static/'
