@@ -1,0 +1,663 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Account - Masjid Al Hasanah</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #07923F;
+            --primary-dark: #057132;
+            --primary-light: #10b955;
+            --secondary: #1a5f7a;
+            --secondary-dark: #144a60;
+            --accent: #ffc107;
+            --accent-dark: #e0a800;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .logo-text h2 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-greeting {
+            cursor: pointer;
+            color: var(--dark);
+            font-weight: 500;
+            margin: 0;
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem 5%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            color: white;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        /* Account Card */
+        .account-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            padding: 2rem;
+        }
+
+        .info-group {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .info-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.3rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .info-value input,
+        .info-value select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            color: var(--dark);
+            background: var(--white);
+        }
+
+        .info-value input:disabled {
+            background: var(--light);
+            cursor: not-allowed;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(7, 146, 63, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(7, 146, 63, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(26, 95, 122, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(26, 95, 122, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            width: 100%;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+            font-family: 'Poppins', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 0 1rem;
+            }
+            
+            .footer-bottom {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        /* Prayer Times Styles */
+        .prayer-times-bar {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 0;
+            overflow: hidden;
+            position: relative;
+            margin-top: 80px;
+        }
+
+        .prayer-times-container {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .prayer-location {
+            font-weight: 600;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+
+        .prayer-time {
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .prayer-time span {
+            margin-left: 0.5rem;
+            font-weight: 500;
+        }
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Navbar Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 180px;
+            box-shadow: 0 8px 24px rgba(7,146,63,0.15);
+            border-radius: 8px;
+            z-index: 1000;
+            right: 0;
+            top: 120%;
+            padding: 0.5rem 0;
+            border: 1px solid #e3e6f0;
+        }
+
+        .dropdown-content a {
+            color: var(--dark);
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: background 0.2s, color 0.2s;
+            border-radius: 0;
+            background: none;
+            font-weight: 500;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(7,146,63,0.08);
+            color: var(--primary);
+        }
+
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+
+        /* Chevron rotates on hover */
+        .dropdown:hover .fa-chevron-down,
+        .dropdown:focus-within .fa-chevron-down {
+            transform: rotate(180deg);
+            transition: transform 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'admindashboard' %}" class="logo">
+            <img src="{% static 'logo.png' %}" alt="Masjid Al Hasanah">
+            <div class="logo-text">
+                <h2>Masjid Al Hasanah</h2>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="{% url 'admindashboard' %}">Dashboard</a>
+            <div class="dropdown">
+                <span class="nav-greeting">Events<i class="fas fa-chevron-down"></i></span>
+                <div class="dropdown-content">
+                    <a href="{% url 'admincreateevent' %}"><i class="fas fa-user"></i> Create Event</a>
+                    <a href="{% url 'eventadmin' %}"><i class="fas fa-sign-out-alt"></i> Manage Event</a>
+                </div>
+            </div>
+            <a href="{% url 'adminreport' %}">Reports</a>
+            <a href="{% url 'adminaccount' %}">Account</a>
+            <a href="{% url 'adminfeedback' %}">Feedback</a>
+            {% if adminusername %}
+            <span class="nav-greeting">Welcome, {{ adminusername }}</span>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="prayer-times-bar">
+        <div class="prayer-times-container">
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+            <!-- Duplicate for continuous scrolling -->
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-user-cog me-2"></i> Account Settings</h1>
+            <a href="{% url 'admindashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+       
+
+        <!-- Account Card -->
+        <div class="account-card">
+            <form method="POST" action="{% url 'adminaccount' %}">
+                {% csrf_token %}
+                <div class="info-group">
+                    <div class="info-label">Admin ID</div>
+                    <div class="info-value">
+                        <input type="text" name="adminid" value="{{ admin.adminid }}" disabled>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Full Name</div>
+                    <div class="info-value">
+                        <input type="text" name="adminname" value="{{ admin.adminname }}" {% if not edit_mode %}disabled{% endif %} required>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">
+                        <input type="text" name="adminusername" value="{{ admin.adminusername }}" {% if not edit_mode %}disabled{% endif %} required>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">
+                        <input type="email" name="adminemail" value="{{ admin.adminemail }}" {% if not edit_mode %}disabled{% endif %} required>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Phone Number</div>
+                    <div class="info-value">
+                        <input type="tel" name="adminnumber" value="{{ admin.adminnumber }}" {% if not edit_mode %}disabled{% endif %} required>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Birth Date</div>
+                    <div class="info-value">
+                        <input type="date" name="adminbirthdate" value="{{ admin.adminbirthdate|date:'Y-m-d' }}" {% if not edit_mode %}disabled{% endif %} required>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Gender</div>
+                    <div class="info-value">
+                        <select name="admingender" {% if not edit_mode %}disabled{% endif %} required>
+                            <option value="Male" {% if admin.admingender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if admin.admingender == 'Female' %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Role</div>
+                    <div class="info-value">
+                        <input type="text" value="{{ admin.adminrole }}" disabled>
+                    </div>
+                </div>
+
+                {% if edit_mode %}
+                <div class="info-group">
+                    <div class="info-label">Current Password</div>
+                    <div class="info-value">
+                        <input type="password" name="adminpassword" required>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">New Password (Optional)</div>
+                    <div class="info-value">
+                        <input type="password" name="new_password">
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="action-buttons">
+                    {% if edit_mode %}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a href="{% url 'adminaccount' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    {% else %}
+                    <a href="{% url 'adminaccount' %}?edit=true" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit Information
+                    </a>
+                    {% endif %}
+                </div>
+            </form>
+            <div class="logout-section" style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee; text-align: center;">
+                <a href="{% url 'index' %}" class="btn btn-danger" style="width: 200px;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Masjid Al Hasanah is dedicated to serving the Muslim community through spiritual guidance, education, and community services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="{% url 'admindashboard' %}">Dashboard</a>
+                <a href="{% url 'eventadmin' %}">Events</a>
+                <a href="{% url 'adminreport' %}">Reports</a>
+                <a href="{% url 'adminaccount' %}">Account</a>
+                <a href="{% url 'adminfeedback' %}">Feedback</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Persiaran Kemajuan, Seksyen 9, <br> 43650 Bandar Baru Bangi, Selangor.</p>
+                <p><i class="fas fa-phone"></i> +60 12-345 6789</p>
+                <p><i class="fas fa-envelope"></i> info@masjidalhasanah.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Masjid Al Hasanah. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

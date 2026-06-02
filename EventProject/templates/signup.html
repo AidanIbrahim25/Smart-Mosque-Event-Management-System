@@ -1,0 +1,778 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Al Hasanah - Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Global Variables */
+        :root {
+            --primary: #07923F; /* Green color for Islamic theme */
+            --primary-dark: #057132;
+            --primary-light: #10b955;
+            --secondary: #1a5f7a;
+            --accent: #ffc107;
+            --white: #ffffff;
+            --light: #f5f5f5;
+            --dark: #333333;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --rounded-sm: 5px;
+            --rounded-md: 10px;
+            --rounded-lg: 20px;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+            background: linear-gradient(135deg, rgba(7, 146, 63, 0.9), rgba(26, 95, 122, 0.9)),
+                    url('{% static "images/hasanah1.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+            z-index: 9999; /* Increased z-index to ensure it's above all other elements */
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 0.7rem 5%;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+
+        .logo-text h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.2rem;
+            color: var(--primary);
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn.btn-primary {
+            text-decoration: none;
+        }
+
+      
+
+        /* Authentication Page Layout */
+        .auth-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 100px 0 80px 0; /* Space for navbar and footer */
+        }
+        
+        .login-container {
+            display: flex;
+            width: 80%;
+            max-width: 1200px;
+            height: auto;
+            min-height: 600px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: var(--rounded-md);
+        }
+
+        .login-left {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+        }
+
+        .login-right {
+            flex: 1;
+            background-color: var(--primary); /* Islamic green theme */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-right-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background: url('hasanah1.jpg');
+            background-size: cover;
+            background-position: center;
+            pointer-events: none; /* Prevents this element from blocking clicks */
+        }
+
+        .login-form-wrapper {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-heading {
+            font-size: 2.5rem;
+            color: var(--dark);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        /* Signup Form Styles */
+        .login-form-wrapper {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-heading {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 50px;
+            padding: 0 1.2rem;
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-container:focus-within {
+            border-color: #07923F;
+            box-shadow: 0 0 0 3px rgba(7, 146, 63, 0.2);
+        }
+
+        .input-container ion-icon {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-right: 10px;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 0.9rem 0;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            outline: none;
+        }
+
+        .input-container input::placeholder {
+            color: #adb5bd;
+        }
+
+        /* Date input styling */
+        input[type="date"] {
+            color: #2c3e50;
+        }
+
+        input[type="date"]:invalid {
+            color: #adb5bd;
+        }
+
+        /* Submit button */
+        button[type="submit"] {
+            background: #07923F;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: #057132;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(7, 146, 63, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .login-form-wrapper {
+                padding: 1.5rem;
+            }
+            
+            .login-heading {
+                font-size: 1.75rem;
+            }
+            
+            .input-container input {
+                padding: 0.8rem 0;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-form-wrapper {
+                padding: 1.25rem;
+            }
+            
+            .login-heading {
+                font-size: 1.5rem;
+            }
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(7, 146, 63, 0.1);
+            background-color: white;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(7, 146, 63, 0.2);
+            margin-top: 1rem;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(7, 146, 63, 0.3);
+        }
+
+        .signup-btn {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid white;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 2rem;
+        }
+
+        .signup-btn:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* Right Side Content */
+        .right-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .right-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            max-width: 400px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .login-container {
+                flex-direction: column;
+                width: 90%;
+            }
+            
+            .login-left, .login-right {
+                flex: none;
+                width: 100%;
+            }
+            
+            .login-left {
+                padding: 2rem 1rem;
+                order: 2;
+            }
+            
+            .login-right {
+                padding: 3rem 1rem;
+                order: 1;
+                min-height: 300px;
+            }
+            
+            .right-content h2 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .login-heading {
+                font-size: 2rem;
+            }
+            
+            .right-content h2 {
+                font-size: 2rem;
+            }
+            
+            .right-content p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 5% 2rem;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .social-links {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'index' %}" class="logo">
+            <img src="{% static 'logo.png' %}" alt="Masjid Al Hasanah">
+            <div class="logo-text">
+                <h2>Masjid Al Hasanah</h2>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="{% url 'index' %}">Home</a>
+            <a href="{% url 'event' %}">Event</a>
+            <a href="{% url 'about' %}">About Us</a>
+            <a href="#contact">Contact</a>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="auth-content">
+        <div class="login-container">
+            <!-- Right Side - Already Registered -->
+            <div class="login-right" style="position: relative;">
+                <div class="login-right-bg"></div>
+                <div class="right-content" style="position: relative; z-index: 100;">
+                    <p class="arabic" style="font-size: 1.6rem; margin-bottom: 1rem; color: #ffc107; direction: rtl; font-family: 'Noto Naskh Arabic', serif;">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+                    <h2>Already Registered?</h2>
+                    <p>Sign in to access your account and manage mosque events!</p>
+                    <div style="margin-top: 2rem; position: relative; z-index: 9999;">
+                        <a href="{% url 'login' %}" style="display: inline-block; text-decoration: none; background-color: white; color: #07923F; border: 2px solid white; padding: 0.8rem 2.5rem; border-radius: 50px; font-size: 1rem; font-weight: 500; cursor: pointer;">Log In</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Left Side - Sign Up Form -->
+            <div class="login-left">
+                <div class="login-form-wrapper">
+                    <h1 class="login-heading">Create Account</h1>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="input-container">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" name="userid" placeholder="User ID" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" name="user_name" placeholder="Name" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <input type="email" name="useremail" placeholder="Email" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="call-outline"></ion-icon>
+                            <input type="tel" name="usernumber" placeholder="Phone Number" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="calendar-outline"></ion-icon>
+                            <input type="date" name="userbirthdate" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="male-female"></ion-icon>
+                            <input type="text" name="usergender" placeholder="Gender" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" name="username" placeholder="Username" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <input type="password" name="userpassword" placeholder="Password" required>
+                        </div>
+                        <div class="input-container">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                        </div>
+                        <button type="submit" class="login">Register</button>
+                    </form>
+                    
+                    <!-- Add ionicons -->
+                    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+                    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Masjid Al Hasanah is dedicated to serving the Muslim community through spiritual guidance, education, and community services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="index.html#home">Home</a>
+                <a href="index.html#features">Event</a>
+                <a href="index.html#about">About Us</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="login.html">Login</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Islamic Center Road, 43000 Kajang, Selangor</p>
+                <p><i class="fas fa-phone"></i> +60 12-345 6789</p>
+                <p><i class="fas fa-envelope"></i> info@masjidalhasanah.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Masjid Al Hasanah. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const passwordInput = document.querySelector('input[name="userpassword"]');
+            const confirmPasswordInput = document.querySelector('input[name="confirm_password"]');
+            
+            // Add focus/blur effects to all inputs
+            const inputs = document.querySelectorAll('.input-container input');
+            inputs.forEach(input => {
+                // Focus effect
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.borderColor = '#07923F';
+                    this.parentElement.style.boxShadow = '0 0 0 3px rgba(7, 146, 63, 0.2)';
+                });
+                
+                // Blur effect
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.borderColor = '#e9ecef';
+                    this.parentElement.style.boxShadow = 'none';
+                });
+            });
+            
+            // Form validation on submit
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    let isValid = true;
+                    
+                    // Check if passwords match
+                    if (passwordInput && confirmPasswordInput) {
+                        if (passwordInput.value !== confirmPasswordInput.value) {
+                            isValid = false;
+                            showError('Passwords do not match!');
+                        } else if (passwordInput.value.length < 8) {
+                            isValid = false;
+                            showError('Password must be at least 8 characters long!');
+                        }
+                    }
+                    
+                    // Check required fields
+                    const requiredFields = form.querySelectorAll('[required]');
+                    requiredFields.forEach(field => {
+                        if (!field.value.trim()) {
+                            isValid = false;
+                            field.parentElement.style.borderColor = '#ff6b6b';
+                        }
+                    });
+                    
+                    if (!isValid) {
+                        e.preventDefault();
+                    }
+                });
+            }
+            
+            // Show error message
+            function showError(message) {
+                // Remove any existing error messages
+                const existingError = document.querySelector('.error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                // Create and show new error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.style.color = '#dc3545';
+                errorDiv.style.marginTop = '10px';
+                errorDiv.style.fontSize = '0.9rem';
+                errorDiv.style.textAlign = 'center';
+                errorDiv.textContent = message;
+                
+                // Insert before the submit button
+                const submitButton = form.querySelector('button[type="submit"]');
+                form.insertBefore(errorDiv, submitButton);
+            }
+        });
+    </script>
+</body>
+</html>

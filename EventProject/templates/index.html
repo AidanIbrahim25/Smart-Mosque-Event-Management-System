@@ -1,0 +1,1334 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Al Hasanah - Event Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #07923F; /* Green color for Islamic theme */
+            --primary-dark: #057132;
+            --primary-light: #10b955;
+            --secondary: #1a5f7a; /* Blue accent */
+            --secondary-dark: #144a60;
+            --accent: #ffc107; /* Gold accent */
+            --accent-dark: #e0a800;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .arabic {
+            font-family: 'Noto Naskh Arabic', serif;
+            direction: rtl;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 0.7rem 5%;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .logo:hover img {
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text h2 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.5rem;
+            line-height: 1.2;
+            transition: var(--transition);
+        }
+
+        .logo-text p {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(26, 95, 122, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(26, 95, 122, 0.3);
+        }
+
+        /* Mobile Navigation */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/arabesque.png');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            background: var(--white);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .section-title h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid transparent;
+            z-index: 1;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(to bottom, rgba(7, 146, 63, 0.05), transparent);
+            transition: height 0.5s ease;
+            z-index: -1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-md);
+            border-top-color: var(--primary);
+        }
+
+        .feature-card:hover::before {
+            height: 100%;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--primary-dark);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 6rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/arabesque.png');
+            opacity: 0.1;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 5% 2rem;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .hero-content {
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--white);
+                flex-direction: column;
+                padding: 2rem;
+                transition: 0.3s;
+                box-shadow: var(--shadow-md);
+                z-index: 100;
+            }
+            .nav-links.active {
+                left: 0;
+            }
+            .hero {
+                text-align: center;
+                justify-content: center;
+                padding: 1rem;
+                padding-top: 6rem;
+            }
+            .hero-content {
+                margin: 0 auto;
+                max-width: 100%;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-section h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .social-links {
+                justify-content: center;
+            }
+            .footer-section a:hover {
+                transform: translateX(0) scale(1.05);
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+            }
+            .btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .hero div {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .logo-text h2 {
+                font-size: 1.2rem;
+            }
+            .logo-text p {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(7, 146, 63, 0.8), rgba(7, 146, 63, 0.7)), 
+                        url('hasanah1.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            color: white;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/arabesque.png');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            background: var(--white);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .section-title h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid transparent;
+            z-index: 1;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(to bottom, rgba(7, 146, 63, 0.05), transparent);
+            transition: height 0.5s ease;
+            z-index: -1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-md);
+            border-top-color: var(--primary);
+        }
+
+        .feature-card:hover::before {
+            height: 100%;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--primary-dark);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 6rem 5%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/arabesque.png');
+            opacity: 0.1;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 5% 2rem;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .hero-content {
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--white);
+                flex-direction: column;
+                padding: 2rem;
+                transition: 0.3s;
+                box-shadow: var(--shadow-md);
+            }
+            .nav-links.active {
+                left: 0;
+            }
+            .hero {
+                text-align: center;
+                padding-top: 6rem;
+            }
+            .hero-content {
+                margin: 0 auto;
+                max-width: 100%;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-section h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .social-links {
+                justify-content: center;
+            }
+            .footer-section a:hover {
+                transform: translateX(0) scale(1.05);
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+            }
+            .btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            .hero div {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .logo-text h2 {
+                font-size: 1.2rem;
+            }
+            .logo-text p {
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Prayer Times Bar */
+        @keyframes scrollPrayer {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-70%); }
+        }
+        
+        .prayer-times-bar {
+            width: 100%;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 0;
+            padding: 0.5rem 0;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .prayer-times-container {
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+            animation: scrollPrayer 30s linear infinite;
+            padding-right: 2rem;
+            min-width: 100%;
+            will-change: transform;
+        }
+        
+        .prayer-times-container:hover {
+            animation-play-state: paused; /* Pause on hover */
+        }
+        
+        .prayer-location {
+            text-align: left;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            line-height: 1.1;
+            min-width: 180px;
+            margin-right: 2rem;
+            display: inline-block;
+        }
+        
+        .prayer-time {
+            text-align: left;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            margin-right: 1.5rem;
+            display: inline-block;
+        }
+        
+        .prayer-time span {
+            color: #fff;
+            font-weight: normal;
+        }
+        
+        @media (max-width: 900px) {
+            .prayer-times-container {
+                animation-duration: 25s;
+            }
+            .prayer-location {
+                min-width: 120px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Arabic Text */
+        .arabic {
+            font-family: 'Noto Naskh Arabic', serif;
+            direction: rtl;
+        }
+        
+        /* Events Section */
+        .events {
+            padding: 6rem 5%;
+            background: var(--light);
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .event-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .event-card:hover .event-image img {
+            transform: scale(1.1);
+        }
+        
+        .event-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .event-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .event-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+        
+        .event-date, .event-time {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .event-content a {
+            margin-top: auto;
+            align-self: flex-start;
+        }
+        
+        /* News Section */
+        .news {
+            padding: 6rem 5%;
+            background: white;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .news-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .news-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .news-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .news-card p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+        
+        .news-card a {
+            margin-top: auto;
+            align-self: flex-start;
+        }
+        
+        @media (max-width: 768px) {
+            .events-grid, .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* About Us Section */
+        .about {
+            padding: 6rem 5%;
+            background: var(--light);
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            margin-top: 3rem;
+            align-items: center;
+        }
+        
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .about-text h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .about-text h3:first-child {
+            margin-top: 0;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--dark);
+        }
+        
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2.5rem;
+            text-align: center;
+        }
+        
+        .stat h4 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat p {
+            font-size: 1rem;
+            margin: 0;
+            color: var(--secondary);
+        }
+        
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-image {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .about-stats {
+                margin-top: 2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .about-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="{% static 'logo.png' %}" alt="Masjid Al Hasanah">
+            
+            <div class="logo-text">
+                <h2>Masjid Al Hasanah</h2>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="{% url 'event' %}">Events</a>
+            <a href="{% url 'about' %}">About Us</a>
+            <a href="#contact">Contact</a>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home" style="background: linear-gradient(135deg, rgba(7, 146, 63, 0.8), rgba(7, 146, 63, 0.7)), url({% static 'hasanah1.jpg' %}); background-size: cover; background-position: center center; background-repeat: no-repeat;">
+        <div class="hero-content">
+            <p class="arabic" style="font-size: 1.6rem; margin-bottom: 1rem; color: #ffc107;">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+            <h1>Welcome to Masjid Al Hasanah</h1>
+            <p>Streamline your mosque events and community engagement with our comprehensive event management system. Connect, organize, and grow together.</p>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Prayer Times Section -->
+    <div class="prayer-times-bar">
+        <div class="prayer-times-container">
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+            <!-- Duplicate for continuous scrolling -->
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+        </div>
+    </div>
+
+
+    
+    <!-- Islamic News Section -->
+    <section class="news">
+        <div class="section-title">
+            <h2>Islamic News</h2>
+            <p>Stay updated with important Islamic information and community news</p>
+        </div>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h3>Community Food Drive</h3>
+                <p>Help feed those in need in our community. We're collecting non-perishable food items for distribution to families in need.</p>
+                <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">Ongoing until June 30, 2025</p>
+                <a href="#" class="btn btn-outline" style="color: var(--primary); border-color: var(--primary);">Read More</a>
+            </div>
+            <div class="news-card">
+                <div class="news-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>New Islamic Library Opening</h3>
+                <p>Our new library featuring hundreds of Islamic books, resources, and digital media will be opening next month. Donations of books are welcome.</p>
+                <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">July 15, 2025</p>
+                <a href="#" class="btn btn-outline" style="color: var(--primary); border-color: var(--primary);">Read More</a>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>Ready to Transform Your Mosque's Event Management?</h2>
+        <p>Join hundreds of mosques already using our platform to better serve their communities. Get started today and experience the difference.</p>
+        <a href="{% url 'login' %}" class="btn btn-outline" style="margin-right: 1rem;">Sign Up Now</a>
+        <a href="#contact" class="btn" style="background: white; color: var(--primary);">Contact Us</a>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Masjid Al Hasanah is dedicated to serving the Muslim community through spiritual guidance, education, and community services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'event' %}">Event</a>
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="#contact">Contact</a>
+                <a href="{% url 'login' %}">Login</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Persiaran Kemajuan, Seksyen 9, <br> 43650 Bandar Baru Bangi, Selangor.</p>
+                <p><i class="fas fa-phone"></i> +60 12-345 6789</p>
+                <p><i class="fas fa-envelope"></i> info@masjidalhasanah.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Masjid Al Hasanah. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

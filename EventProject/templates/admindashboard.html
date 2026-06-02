@@ -1,0 +1,1290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Masjid Al Hasanah</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #07923F;
+            --primary-dark: #057132;
+            --primary-light: #10b955;
+            --secondary: #07923F;
+            --secondary-dark: #057132;
+            --accent: #ffc107;
+            --accent-dark: #e0a800;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.75rem; }
+
+        p {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 1rem;
+        }
+
+        .arabic {
+            font-family: 'Noto Naskh Arabic', serif;
+            direction: rtl;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .logo-text h2 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Navigation Dropdown Styles */
+        .nav-links .dropdown {
+            position: relative;
+        }
+
+        .nav-links .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links .dropdown-toggle::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links .dropdown-toggle:hover {
+            color: var(--primary);
+        }
+
+        .nav-links .dropdown-toggle:hover::after {
+            width: 100%;
+        }
+
+        .nav-links .dropdown-toggle i {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links .dropdown.show .dropdown-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .nav-links .dropdown-menu {
+            position: absolute !important;
+            top: 100% !important;
+            left: 0 !important;
+            background: var(--white) !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-radius: var(--border-radius) !important;
+            box-shadow: var(--shadow-md) !important;
+            min-width: 200px !important;
+            padding: 0.5rem 0 !important;
+            margin-top: 0.5rem !important;
+            z-index: 10000 !important;
+            display: none !important;
+        }
+
+        .nav-links .dropdown.show .dropdown-menu {
+            display: block !important;
+        }
+
+        .nav-links .dropdown-item {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            padding: 0.75rem 1rem !important;
+            color: var(--dark) !important;
+            text-decoration: none !important;
+            transition: var(--transition) !important;
+            font-weight: 400 !important;
+            border: none !important;
+            background: none !important;
+            width: 100% !important;
+            text-align: left !important;
+        }
+
+        .nav-links .dropdown-item:hover {
+            background-color: rgba(7, 146, 63, 0.1) !important;
+            color: var(--primary) !important;
+            text-decoration: none !important;
+        }
+
+        .nav-links .dropdown-item i {
+            width: 1rem !important;
+            text-align: center !important;
+            font-size: 0.875rem !important;
+        }
+
+        .nav-greeting {
+            cursor: pointer;
+            color: var(--dark);
+            font-weight: 500;
+            margin: 0;
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+       
+
+        /* Dashboard Content Styles */
+        .dashboard-content {
+            margin-top: 120px;
+            padding: 2rem 5%;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stats-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(7,146,63,0.06);
+            margin-bottom: 1rem;
+            transition: box-shadow 0.3s;
+            border: none;
+            overflow: hidden;
+            min-width: 150px;
+            flex: 1 1 150px;
+            max-width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.2rem 0.7rem 1.1rem 0.7rem;
+            position: relative;
+        }
+        .stats-card::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #10b955;
+            border-radius: 14px 14px 0 0;
+        }
+        .stats-card .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #eafaf1;
+            margin-bottom: 0.7rem;
+            margin-top: 0.2rem;
+        }
+        .stats-card .stat-icon i {
+            color: #07923F;
+            font-size: 1.4rem;
+        }
+        .stats-card .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.5px;
+        }
+        .stats-card .stat-label {
+            color: #6c757d;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0;
+            letter-spacing: 0.1px;
+        }
+        @media (max-width: 900px) {
+            .stats-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .stats-card {
+                max-width: 100%;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            width: 100%;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+            font-family: 'Poppins', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        /* Responsive footer adjustments */
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 0 1rem;
+            }
+            
+            .footer-bottom {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        /* Table Styles */
+        .table {
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background-color: white;
+            display: table;
+        }
+        .table th, .table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e3e6f0;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .table th {
+            font-weight: 600;
+            background-color: var(--primary);
+            color: #fff;
+        }
+        .table tbody tr:hover {
+            background-color: rgba(7, 146, 63, 0.08);
+            transition: background-color 0.3s ease;
+        }
+        .table thead th {
+            background-color: var(--primary);
+            color: #fff;
+        }
+        .table-bordered {
+            border: 1px solid #e3e6f0;
+        }
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #e3e6f0;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+            display: block;
+        }
+        /* Ensure table content is visible */
+        .table-responsive table {
+            display: table !important;
+            width: 100% !important;
+        }
+        .table-responsive thead {
+            display: table-header-group !important;
+        }
+        .table-responsive tbody {
+            display: table-row-group !important;
+        }
+        .table-responsive tr {
+            display: table-row !important;
+        }
+        .table-responsive th,
+        .table-responsive td {
+            display: table-cell !important;
+        }
+        /* Remove duplicate/overlapping table rules */
+        /* End Table Styles */
+
+        /* Button Styles */
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        /* Form Styles */
+        .form-control {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Badge Styles */
+        .badge {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            padding: 0.5em 0.8em;
+        }
+
+        /* Existing dashboard styles */
+        .border-left-primary { border-left: 4px solid var(--primary) !important; }
+        .border-left-success { border-left: 4px solid var(--primary) !important; }
+        .border-left-info { border-left: 4px solid var(--primary) !important; }
+        .border-left-warning { border-left: 4px solid var(--accent) !important; }
+        .card { position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid #e3e6f0; border-radius: 0.35rem; }
+        .card-body { flex: 1 1 auto; min-height: 1px; padding: 1.25rem; }
+        .text-xs { font-size: .7rem; }
+        .text-gray-300 { color: #dddfeb !important; }
+        .text-gray-800 { color: #5a5c69 !important; }
+        .btn-group {
+            position: relative;
+            z-index: 1000;
+        }
+        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.2rem; }
+
+        /* Update text colors */
+        .text-primary { color: var(--primary) !important; }
+        .text-success { color: var(--primary) !important; }
+        .text-info { color: var(--primary) !important; }
+        .text-warning { color: var(--accent) !important; }
+
+        /* Update button colors */
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-info {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .btn-info:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: white;
+        }
+
+        /* Update badge colors */
+        .bg-primary { background-color: var(--primary) !important; }
+        .bg-success { background-color: var(--primary) !important; }
+        .bg-info { background-color: var(--primary) !important; }
+        .bg-warning { background-color: var(--accent) !important; }
+
+        /* Update form control focus colors */
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(7, 146, 63, 0.25);
+        }
+
+        /* Update select focus colors */
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(7, 146, 63, 0.25);
+        }
+
+        /* Update pagination colors */
+        .page-link {
+            color: var(--primary);
+        }
+        .page-item.active .page-link {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Update progress bar colors */
+        .progress-bar {
+            background-color: var(--primary);
+        }
+
+        /* Update alert colors */
+        .alert-primary {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        /* Update tooltip colors */
+        .tooltip .tooltip-inner {
+            background-color: var(--primary);
+        }
+
+        /* Update popover colors */
+        .popover {
+            border-color: var(--primary);
+        }
+        .popover-header {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Update modal header colors */
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Update dropdown colors */
+        .dropdown-item:active {
+            background-color: var(--primary);
+        }
+
+        /* Update custom checkbox colors */
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Update custom radio colors */
+        .form-check-input[type="radio"]:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Update custom switch colors */
+        .form-switch .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Update custom range colors */
+        .form-range::-webkit-slider-thumb {
+            background: var(--primary);
+        }
+        .form-range::-moz-range-thumb {
+            background: var(--primary);
+        }
+
+        /* Update custom file input colors */
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* Update custom select colors */
+        .form-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* Update custom textarea colors */
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* Update custom input group colors */
+        .input-group-text {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Update custom list group colors */
+        .list-group-item.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Update custom nav colors */
+        .nav-pills .nav-link.active {
+            background-color: var(--primary);
+        }
+
+        /* Update custom tab colors */
+        .nav-tabs .nav-link.active {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Update custom accordion colors */
+        .accordion-button:not(.collapsed) {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        /* Update card header colors */
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            font-weight: 600;
+        }
+
+        .card-header h5, .card-header h6 {
+            margin: 0;
+            color: white;
+            font-weight: 600;
+        }
+
+        .card-header .text-primary {
+            color: white !important;
+        }
+
+        /* Ensure card headers are visible */
+        .card-header * {
+            color: white !important;
+        }
+
+        /* Update custom table colors */
+        .table-primary {
+            background-color: var(--primary-light);
+        }
+
+        /* Update custom alert colors */
+        .alert-primary {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        /* Update custom badge colors */
+        .badge-primary {
+            background-color: var(--primary);
+        }
+
+        /* Update custom button colors */
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Update custom progress colors */
+        .progress-bar {
+            background-color: var(--primary);
+        }
+
+        /* Update custom spinner colors */
+        .spinner-border {
+            color: var(--primary);
+        }
+
+        /* Update custom toast colors */
+        .toast-header {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Update custom tooltip colors */
+        .tooltip .tooltip-inner {
+            background-color: var(--primary);
+        }
+
+        /* Update custom popover colors */
+        .popover-header {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Update custom modal colors */
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Update custom dropdown colors */
+        .dropdown-item:active {
+            background-color: var(--primary);
+        }
+
+        /* Prayer Times Styles */
+        .prayer-times-bar {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 0;
+            overflow: hidden;
+            position: relative;
+            margin-top: 80px;
+        }
+
+        .prayer-times-container {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .prayer-location {
+            font-weight: 600;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+
+        .prayer-time {
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .prayer-time span {
+            margin-left: 0.5rem;
+            font-weight: 500;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .dropdown-item {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            padding: 0.5rem 1rem;
+        }
+
+        .dropdown-item i {
+            margin-right: 0.5rem;
+            width: 1rem;
+            text-align: center;
+        }
+
+        .dropdown-item.text-danger {
+            color: var(--danger) !important;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background-color: var(--danger);
+            color: white !important;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(7, 146, 63, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .table tbody tr td {
+            vertical-align: middle;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            z-index: 99999 !important;
+            min-width: 200px;
+            padding: 0.5rem 0;
+            margin: 0;
+            background-color: white;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 0.375rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+            transform: none !important;
+            top: 100% !important;
+            left: 0 !important;
+            right: auto !important;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.875rem;
+            position: relative;
+            z-index: 99999;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(7, 146, 63, 0.1);
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .dropdown-item.text-danger {
+            color: #dc3545 !important;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background-color: #dc3545;
+            color: white !important;
+        }
+
+        .dropdown-item i {
+            width: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-divider {
+            margin: 0.5rem 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 99999;
+        }
+
+        /* Ensure dropdown appears above table */
+        .table-responsive {
+            position: relative;
+            z-index: 1;
+        }
+
+        .table {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Fix for dropdown positioning in table */
+        .table td .btn-group {
+            position: relative;
+            z-index: 1000;
+        }
+
+        .table td .dropdown-menu {
+            position: absolute;
+            top: 100% !important;
+            left: 0 !important;
+            right: auto !important;
+            z-index: 99999 !important;
+        }
+
+        /* Override Bootstrap dropdown positioning */
+        .dropdown-menu.show {
+            z-index: 99999 !important;
+        }
+
+        /* Ensure all dropdown elements are above other content */
+        .dropdown-menu * {
+            position: relative;
+            z-index: 99999;
+        }
+
+        /* Fix for dropdowns in responsive tables */
+        .table-responsive {
+            overflow: visible !important;
+        }
+        
+        .table .btn-group {
+            position: relative;
+        }
+
+        /* Custom Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 180px;
+            box-shadow: 0 8px 24px rgba(7,146,63,0.15);
+            border-radius: 8px;
+            z-index: 1000;
+            right: 0;
+            top: 120%;
+            padding: 0.5rem 0;
+            border: 1px solid #e3e6f0;
+        }
+
+        .dropdown-content a {
+            color: var(--dark);
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: background 0.2s, color 0.2s;
+            border-radius: 0;
+            background: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(7,146,63,0.08);
+            color: var(--primary);
+        }
+
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+
+        /* Optional: Chevron rotates on hover */
+        .dropdown:hover .fa-chevron-down,
+        .dropdown:focus-within .fa-chevron-down {
+            transform: rotate(180deg);
+            transition: transform 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Prayer Times Section -->
+    <div class="prayer-times-bar">
+        <div class="prayer-times-container">
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+            <!-- Duplicate for continuous scrolling -->
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'admindashboard' %}" class="logo">
+            <img src="{% static 'logo.png' %}" alt="Masjid Al Hasanah">
+            <div class="logo-text">
+                <h2>Masjid Al Hasanah</h2>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="{% url 'admindashboard' %}">Dashboard</a>
+            <div class="dropdown">
+                <span class="nav-greeting">Events<i class="fas fa-chevron-down"></i></span>
+                <div class="dropdown-content">
+                    <a href="{% url 'admincreateevent' %}"><i class="fas fa-user"></i> Create Event</a>
+                    <a href="{% url 'eventadmin' %}"><i class="fas fa-sign-out-alt"></i> Manage Event</a>
+                </div>
+            </div>
+            <a href="{% url 'adminreport' %}">Reports</a>
+            <a href="{% url 'adminaccount' %}">Account</a>
+            <a href="{% url 'adminfeedback' %}">Feedback</a>
+            {% if adminusername %}
+            <span class="nav-greeting">Welcome, {{ adminusername }}</span>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="dashboard-content">
+        <!-- Statistics Cards -->
+        <div class="stats-row">
+            <div class="stats-card">
+                <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                <div class="stat-value">{{ total_events }}</div>
+                <div class="stat-label">Total Events</div>
+            </div>
+            <div class="stats-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value">{{ total_attendees }}</div>
+                <div class="stat-label">Total Attendees</div>
+            </div>
+            <div class="stats-card">
+                <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="stat-value">{{ upcoming_events.count }}</div>
+                <div class="stat-label">Upcoming Events</div>
+            </div>
+            <div class="stats-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value">{{ pending_registrations }}</div>
+                <div class="stat-label">Pending Registrations</div>
+            </div>
+        </div>
+  
+       
+
+
+        <!-- Event Management Section -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Event Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <form method="get" class="d-flex gap-2">
+                        <select name="status" class="form-select" onchange="this.form.submit()">
+                            <option value="">All Events</option>
+                            <option value="upcoming" {% if status == 'upcoming' %}selected{% endif %}>Upcoming Events</option>
+                            <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed Events</option>
+                            <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Cancelled Events</option>
+                        </select>
+                    </form>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Location</th>
+                                <th>Fee (RM)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in events %}
+                            <tr>
+                                <td>{{ event.eventid }}</td>
+                                <td>{{ event.eventname }}</td>
+                                <td>{{ event.eventdate }}</td>
+                                <td>{{ event.eventtime }}</td>
+                                <td>{{ event.eventlocation }}</td>
+                                <td>{{ event.fee }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No events found</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Events Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Completed Events</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Event Name</th>
+                                        <th>Date</th>
+                                        <th>Location</th>
+                                        <th>Organizer</th>
+                                        <th>Total Attendees</th>
+                                        <th>Completion Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for event in completed_events %}
+                                    <tr>
+                                        <td>{{ event.eventname }}</td>
+                                        <td>{{ event.eventdate|date:"M d, Y" }} {{ event.eventtime|time:"h:i A" }}</td>
+                                        <td>{{ event.eventlocation }}</td>
+                                        <td>{{ event.eventorganizer }}</td>
+                                        <td>{{ event.registrations.count }}</td>
+                                        <td>{{ event.updated_at|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No completed events found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Masjid Al Hasanah is dedicated to serving the Muslim community through spiritual guidance, education, and community services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="{% url 'admindashboard' %}">Dashboard</a>
+                <a href="{% url 'eventadmin' %}">Events</a>
+                <a href="{% url 'adminreport' %}">Reports</a>
+                <a href="{% url 'adminaccount' %}">Account</a>
+                <a href="{% url 'adminfeedback' %}">Feedback</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Persiaran Kemajuan, Seksyen 9, <br> 43650 Bandar Baru Bangi, Selangor.</p>
+                <p><i class="fas fa-phone"></i> +60 12-345 6789</p>
+                <p><i class="fas fa-envelope"></i> info@masjidalhasanah.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Masjid Al Hasanah. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Navigation dropdown functionality using Bootstrap
+            const dropdownToggle = document.querySelector('.nav-links .dropdown-toggle');
+            const dropdown = document.querySelector('.nav-links .dropdown');
+
+            if (dropdownToggle && dropdown) {
+                // Initialize Bootstrap dropdown
+                const bsDropdown = new bootstrap.Dropdown(dropdownToggle);
+                
+                // Add custom click handler for the chevron animation
+                dropdownToggle.addEventListener('click', function(e) {
+                    const icon = this.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = dropdown.classList.contains('show') ? 'rotate(0deg)' : 'rotate(180deg)';
+                    }
+                });
+
+                // Listen for Bootstrap dropdown events
+                dropdown.addEventListener('show.bs.dropdown', function() {
+                    const icon = dropdownToggle.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+
+                dropdown.addEventListener('hide.bs.dropdown', function() {
+                    const icon = dropdownToggle.querySelector('i');
+                    if (icon) {
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            }
+
+            // Fix for dropdowns getting clipped inside responsive tables
+            var dropdowns = document.querySelectorAll('.table-responsive .dropdown');
+
+            if (dropdowns.length > 0) {
+                // We need to listen on the table container
+                var tableContainer = document.querySelector('.table-responsive');
+
+                tableContainer.addEventListener('show.bs.dropdown', function (event) {
+                    // event.target is the dropdown button
+                    var dropdownMenu = event.target.nextElementSibling;
+                    tableContainer.appendChild(dropdownMenu);
+
+                    // Position the dropdown menu correctly
+                    var rect = event.target.getBoundingClientRect();
+                    dropdownMenu.style.position = 'absolute';
+                    dropdownMenu.style.top = (rect.top + rect.height + window.scrollY) + 'px';
+                    dropdownMenu.style.left = rect.left + 'px';
+                });
+            }
+        
+            // Ensure only one dropdown is open at a time
+            var table = document.querySelector('.table');
+            var openDropdown = null;
+        
+            table.addEventListener('show.bs.dropdown', function (event) {
+                if (openDropdown && openDropdown !== event.target) {
+                    var instance = bootstrap.Dropdown.getInstance(openDropdown);
+                    if (instance) {
+                        instance.hide();
+                    }
+                }
+                openDropdown = event.target;
+            });
+        
+            table.addEventListener('hidden.bs.dropdown', function (event) {
+                if (openDropdown === event.target) {
+                    openDropdown = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

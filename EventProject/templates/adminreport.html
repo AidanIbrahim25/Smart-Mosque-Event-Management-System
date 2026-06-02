@@ -1,0 +1,1412 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Report - Event Registrations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #07923F;
+            --primary-dark: #057132;
+            --primary-light: #10b955;
+            --secondary: #07923F;
+            --secondary-dark: #057132;
+            --accent: #ffc107;
+            --accent-dark: #e0a800;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.75rem; }
+
+        p {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 1rem;
+        }
+
+        .arabic {
+            font-family: 'Noto Naskh Arabic', serif;
+            direction: rtl;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .logo-text h2 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Navigation Dropdown Styles */
+        .nav-links .dropdown {
+            position: relative;
+        }
+
+        .nav-links .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links .dropdown-toggle::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links .dropdown-toggle:hover {
+            color: var(--primary);
+        }
+
+        .nav-links .dropdown-toggle:hover::after {
+            width: 100%;
+        }
+
+        .nav-links .dropdown-toggle i {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links .dropdown.show .dropdown-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .nav-links .dropdown-menu {
+            position: absolute !important;
+            top: 100% !important;
+            left: 0 !important;
+            background: var(--white) !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            border-radius: var(--border-radius) !important;
+            box-shadow: var(--shadow-md) !important;
+            min-width: 200px !important;
+            padding: 0.5rem 0 !important;
+            margin-top: 0.5rem !important;
+            z-index: 10000 !important;
+            display: none !important;
+        }
+
+        .nav-links .dropdown.show .dropdown-menu {
+            display: block !important;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem 5%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .page-header h1 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            border: none;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .stats-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stats-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            background: rgba(7, 146, 63, 0.1);
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .stats-card h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark);
+            line-height: 1;
+        }
+
+        .stats-card p {
+            margin: 0.5rem 0 0;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stats-row .col-md-2 {
+            min-width: 150px;
+            flex: 1;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(7, 146, 63, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(7, 146, 63, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(26, 95, 122, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(26, 95, 122, 0.3);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.5em 1em;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-pending { 
+            background-color: #fff3cd; 
+            color: #856404;
+        }
+        .status-confirmed { 
+            background-color: #d4edda; 
+            color: #155724;
+        }
+        .status-cancelled { 
+            background-color: #f8d7da; 
+            color: #721c24;
+        }
+
+        /* Payment Status Colors */
+        .text-success {
+            color: var(--success) !important;
+        }
+        .text-warning {
+            color: var(--warning) !important;
+        }
+        .text-danger {
+            color: var(--danger) !important;
+        }
+        .text-muted {
+            color: var(--gray) !important;
+        }
+
+        /* Badge Styles */
+        .badge {
+            padding: 0.5em 0.8em;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .badge.bg-success {
+            background-color: var(--success) !important;
+            color: white !important;
+        }
+
+        .badge.bg-danger {
+            background-color: var(--danger) !important;
+            color: white !important;
+        }
+
+        .badge.bg-warning {
+            background-color: var(--warning) !important;
+            color: var(--dark) !important;
+        }
+
+        .badge.bg-secondary {
+            background-color: var(--gray) !important;
+            color: white !important;
+        }
+
+        .badge i {
+            font-size: 0.8rem;
+        }
+
+        /* Table Styles */
+        .table {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: var(--light);
+            font-weight: 600;
+            padding: 1.2rem 1rem;
+            color: var(--dark);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .table td {
+            padding: 1.2rem 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .table tbody tr {
+            transition: var(--transition);
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(7, 146, 63, 0.05);
+        }
+
+        /* Form Controls */
+        .form-control, .form-select {
+            padding: 0.8rem 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(7, 146, 63, 0.1);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 5% 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .stats-card {
+                margin-bottom: 1rem;
+            }
+
+            .stats-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-row .col-md-2 {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .table-responsive {
+                margin: 0 -1rem;
+            }
+
+            /* Mobile filter section */
+            .filter-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .filter-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .filter-header button {
+                align-self: flex-end;
+            }
+
+            /* Mobile action buttons */
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .action-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.7rem;
+            }
+
+            /* Hide tooltips on mobile */
+            .action-btn::before,
+            .action-btn::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .action-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.2rem;
+            }
+
+            .action-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.65rem;
+            }
+
+            .filter-section {
+                margin: 0 -1rem 1rem;
+                border-radius: 0;
+            }
+        }
+
+        /* Prayer Times Styles */
+        .prayer-times-bar {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 0;
+            overflow: hidden;
+            position: relative;
+            margin-top: 80px;
+        }
+
+        .prayer-times-container {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .prayer-location {
+            font-weight: 600;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+
+        .prayer-time {
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .prayer-time span {
+            margin-left: 0.5rem;
+            font-weight: 500;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .action-btn.btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .action-btn.btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .action-btn.btn-secondary:hover {
+            background: var(--secondary-dark);
+        }
+
+        .action-btn.btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .action-btn.btn-success:hover {
+            background: #218838;
+        }
+
+        .action-btn.btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .action-btn.btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Tooltip styles */
+        .action-btn::before {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: -0.5rem;
+        }
+
+        .action-btn:hover::before,
+        .action-btn:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-header {
+            background: linear-gradient(135deg, var(--light), #e9ecef);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-header h5 {
+            margin: 0;
+            color: var(--dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-header h5 i {
+            color: var(--primary);
+        }
+
+        .filter-form {
+            padding: 1.5rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .filter-label i {
+            color: var(--primary);
+            width: 16px;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background: var(--white);
+            color: var(--dark);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(7, 146, 63, 0.1);
+        }
+
+        .filter-select:hover {
+            border-color: var(--primary-light);
+        }
+
+        .filter-actions {
+            display: flex;
+            align-items: end;
+        }
+
+        .filter-submit {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(7, 146, 63, 0.3);
+        }
+
+        .btn-outline-secondary {
+            border: 2px solid var(--gray);
+            color: var(--gray);
+            background: transparent;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--gray);
+            color: var(--white);
+            border-color: var(--gray);
+        }
+
+        /* Navbar Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-greeting {
+            color: var(--dark);
+            font-weight: 500;
+            margin: 0;
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 180px;
+            box-shadow: 0 8px 24px rgba(7,146,63,0.15);
+            border-radius: 8px;
+            z-index: 9999;
+            right: 0;
+            top: 120%;
+            padding: 0.5rem 0;
+            border: 1px solid #e3e6f0;
+        }
+
+        .dropdown-content a {
+            color: var(--dark);
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: background 0.2s, color 0.2s;
+            border-radius: 0;
+            background: none;
+            font-weight: 500;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(7,146,63,0.08);
+            color: var(--primary);
+        }
+
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+
+        /* Chevron rotates on hover */
+        .dropdown:hover .fa-chevron-down,
+        .dropdown:focus-within .fa-chevron-down {
+            transform: rotate(180deg);
+            transition: transform 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Prayer Times Section -->
+    <div class="prayer-times-bar">
+        <div class="prayer-times-container">
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+            <!-- Duplicate for continuous scrolling -->
+            <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+            <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+            <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+            <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+            <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+            <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+            <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+            <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'admindashboard' %}" class="logo">
+            <img src="{% static 'logo.png' %}" alt="Masjid Al Hasanah">
+            <div class="logo-text">
+                <h2>Masjid Al Hasanah</h2>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="{% url 'admindashboard' %}">Dashboard</a>
+            <div class="dropdown">
+                <span class="nav-greeting">Events<i class="fas fa-chevron-down"></i></span>
+                <div class="dropdown-content">
+                    <a href="{% url 'admincreateevent' %}"><i class="fas fa-user"></i> Create Event</a>
+                    <a href="{% url 'eventadmin' %}"><i class="fas fa-sign-out-alt"></i> Manage Event</a>
+                </div>
+            </div>
+            <a href="{% url 'adminreport' %}">Reports</a>
+            <a href="{% url 'adminaccount' %}">Account</a>
+            <a href="{% url 'adminfeedback' %}">Feedback</a>
+            {% if adminusername %}
+            <span class="nav-greeting">Welcome, {{ adminusername }}</span>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1><i class="fas fa-clipboard-list me-2"></i> Event Registrations Report</h1>
+                        <p>Manage and view all event registrations</p>
+                    </div>
+                    <a href="{% url 'admindashboard' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-row">
+                <div class="col-md-2">
+                    <div class="stats-card">
+                        <i class="fas fa-users"></i>
+                        <h3>{{ total_registrations }}</h3>
+                        <p>Total Registrations</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="stats-card">
+                        <i class="fas fa-clock text-warning"></i>
+                        <h3>{{ status_counts.PENDING }}</h3>
+                        <p>Pending</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="stats-card">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <h3>{{ status_counts.CONFIRMED }}</h3>
+                        <p>Confirmed</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="stats-card">
+                        <i class="fas fa-times-circle text-danger"></i>
+                        <h3>{{ status_counts.CANCELLED }}</h3>
+                        <p>Cancelled</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="stats-card">
+                        <i class="fas fa-money-bill-wave text-success"></i>
+                        <h3>{{ payment_counts.PAID }}</h3>
+                        <p>Paid</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="stats-card">
+                        <i class="fas fa-exclamation-triangle text-danger"></i>
+                        <h3>{{ payment_counts.NOT_PAID }}</h3>
+                        <p>Not Paid</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-section">
+                <div class="filter-header">
+                    <h5><i class="fas fa-filter"></i> Filter Options</h5>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="clearFilters()">
+                        <i class="fas fa-times"></i> Clear All
+                    </button>
+                </div>
+                <form method="get" class="filter-form">
+                    <div class="filter-grid">
+                        <div class="filter-item">
+                            <label for="event" class="filter-label">
+                                <i class="fas fa-calendar-alt"></i> Event
+                            </label>
+                            <select name="event" id="event" class="filter-select">
+                                <option value="">All Events</option>
+                                {% for event in events %}
+                                <option value="{{ event.eventid }}" {% if selected_event == event.eventid|stringformat:'s' %}selected{% endif %}>
+                                    {{ event.eventname }} ({{ event.eventdate|date:"M d, Y" }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label for="status" class="filter-label">
+                                <i class="fas fa-info-circle"></i>  Registration Status
+                            </label>
+                            <select name="status" id="status" class="filter-select">
+                                <option value="">All Statuses</option>
+                                <option value="PENDING" {% if selected_status == 'PENDING' %}selected{% endif %}>Pending</option>
+                                <option value="CONFIRMED" {% if selected_status == 'CONFIRMED' %}selected{% endif %}>Confirmed</option>
+                                <option value="CANCELLED" {% if selected_status == 'CANCELLED' %}selected{% endif %}>Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
+                            <label for="payment" class="filter-label">
+                                <i class="fas fa-money-bill-wave"></i> Payment
+                            </label>
+                            <select name="payment" id="payment" class="filter-select">
+                                <option value="">All Payment Statuses</option>
+                                <option value="PAID" {% if selected_payment == 'PAID' %}selected{% endif %}>Paid</option>
+                                <option value="NOT_PAID" {% if selected_payment == 'NOT_PAID' %}selected{% endif %}>Not Paid</option>
+                            </select>
+                        </div>
+                        <div class="filter-item filter-actions">
+                            <button type="submit" class="btn btn-primary filter-submit">
+                                <i class="fas fa-search"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Registrations Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>Registrations List</h5>
+                    <span class="badge bg-secondary">{{ registrations|length }} records</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Event ID & Name</th>
+                                    <th>Contact</th>
+                                    <th>RSVP</th>
+                                    <th>Payment Status</th>
+                                    <th>Registration Status</th>
+                                    <th>Registered On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reg in registrations %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <strong>{{ reg.full_name }}</strong><br>
+                                        <small class="text-muted">{{ reg.ic_number }}</small>
+                                    </td>
+                                    <td>
+                                        <strong>{{ reg.eventid.eventid }}</strong><br>
+                                        <small class="text-muted">{{ reg.eventid.eventname }}</small>
+                                    </td>
+                                    <td>
+                                        {{ reg.phone }}<br>
+                                        <small class="text-muted">{{ reg.email }}</small>
+                                    </td>
+                                    <td>
+                                        {% if reg.rsvp_status == 'YES' %}
+                                            <span class="text-success"><i class="fas fa-check-circle"></i> Yes</span>
+                                        {% elif reg.rsvp_status == 'NO' %}
+                                            <span class="text-danger"><i class="fas fa-times-circle"></i> No</span>
+                                        {% else %}
+                                            <span class="text-warning"><i class="fas fa-question-circle"></i> Maybe</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if reg.payment_status == 'PAID' %}
+                                            <span class="text-success"><i class="fas fa-check-circle"></i> Paid</span>
+                                        {% elif reg.payment_status == 'NOT_PAID' %}
+                                            <span class="text-danger"><i class="fas fa-times-circle"></i> Not Paid</span>
+                                        {% else %}
+                                            <span class="text-muted"><i class="fas fa-minus-circle"></i> Not Set</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if reg.status == 'CONFIRMED' %}
+                                            <span class="badge bg-success"><i class="fas fa-check-circle"></i> Confirmed</span>
+                                        {% elif reg.status == 'CANCELLED' %}
+                                            <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Cancelled</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if reg.registration_date %}
+                                            {{ reg.registration_date|date:"M d, Y h:i A" }}
+                                        {% else %}
+                                            Not set
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Masjid Al Hasanah is dedicated to serving the Muslim community through spiritual guidance, education, and community services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="{% url 'admindashboard' %}">Dashboard</a>
+                <a href="{% url 'eventadmin' %}">Events</a>
+                <a href="{% url 'adminreport' %}">Reports</a>
+                <a href="{% url 'adminaccount' %}">Account</a>
+                <a href="{% url 'adminfeedback' %}">Feedback</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Persiaran Kemajuan, Seksyen 9, <br> 43650 Bandar Baru Bangi, Selangor.</p>
+                <p><i class="fas fa-phone"></i> +60 12-345 6789</p>
+                <p><i class="fas fa-envelope"></i> info@masjidalhasanah.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Masjid Al Hasanah. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Function to update payment status
+        function updatePaymentStatus(registrationId, status) {
+            if (confirm(`Are you sure you want to mark this registration as ${status === 'PAID' ? 'PAID' : 'NOT PAID'}?`)) {
+                // Create form data
+                const formData = new FormData();
+                formData.append('registration_id', registrationId);
+                formData.append('payment_status', status);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                // Send AJAX request
+                fetch('{% url "update_registration_status" 0 %}'.replace('0', registrationId), {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        showNotification('Payment status updated successfully!', 'success');
+                        // Reload page after a short delay
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        showNotification('Error updating payment status: ' + data.error, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error updating payment status', 'error');
+                });
+            }
+        }
+
+        // Function to show notifications
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            // Add styles
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 9999;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add loading states to action buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const actionButtons = document.querySelectorAll('.action-btn');
+            
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.onclick && this.onclick.toString().includes('updatePaymentStatus')) {
+                        // Add loading state
+                        const originalHTML = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                        this.disabled = true;
+                        
+                        // Reset after a delay (in case of error)
+                        setTimeout(() => {
+                            this.innerHTML = originalHTML;
+                            this.disabled = false;
+                        }, 5000);
+                    }
+                });
+            });
+        });
+
+        // Clear all filters
+        function clearFilters() {
+            document.getElementById('event').value = '';
+            document.getElementById('status').value = '';
+            document.getElementById('payment').value = '';
+            document.querySelector('.filter-form').submit();
+        }
+
+        // Auto-submit form when filters change
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterSelects = document.querySelectorAll('.filter-select');
+            filterSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    // Add a small delay to allow user to see the change
+                    setTimeout(() => {
+                        document.querySelector('.filter-form').submit();
+                    }, 300);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

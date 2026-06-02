@@ -1,0 +1,844 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Registration - {{ event.eventname }} - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #07923F; /* Green color for Islamic theme */
+            --primary-dark: #057132;
+            --primary-light: #10b955;
+            --secondary: #1a5f7a; /* Blue accent */
+            --secondary-dark: #144a60;
+            --accent: #ffc107; /* Gold accent */
+            --accent-dark: #e0a800;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+        }
+        
+        body {
+            font-family: 'Amiri', serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+        }
+        
+        .arabic {
+            font-family: 'Noto Naskh Arabic', serif;
+            direction: rtl;
+        }
+        
+        .page-header {
+            background: linear-gradient(rgba(26, 95, 122, 0.85), rgba(7, 146, 119, 0.85)), 
+                        url("{% static 'images/masjid-bg.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .bismillah {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .registration-container {
+            max-width: 800px;
+            margin: 0 auto 5rem;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .event-info {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .event-info h2 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-meta {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .registration-form {
+            padding: 2rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1.25rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(26, 95, 122, 0.25);
+        }
+        
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .btn-submit:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        .required-field::after {
+            content: ' *';
+            color: red;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 3rem 1rem;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .registration-container {
+                margin: 0 1rem 3rem;
+            }
+            
+            .event-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .arabic {
+            font-family: 'Noto Naskh Arabic', serif;
+            direction: rtl;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .logo-text h2 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-greeting {
+            color: var(--dark);
+            font-weight: 500;
+            margin: 0;
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Adjust page header for navbar */
+        .page-header {
+            margin-top: 80px;
+        }
+
+        .navbar.scrolled {
+            padding: 0.7rem 5%;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo:hover img {
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text p {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(7, 146, 63, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(7, 146, 63, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(26, 95, 122, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(26, 95, 122, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        h1, h2 {
+            color: var(--primary);
+        }
+        .form-container, .search-container {
+            margin-bottom: 2rem;
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        /* Mobile Navigation */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(7, 146, 63, 0.8), rgba(7, 146, 63, 0.7)), url('hasanah1.jpg');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+            padding: 10rem 5% 5rem;
+            position: relative;
+        }
+
+        .bismillah {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 5% 2rem;
+            margin-top: 4rem; /* Add margin to separate from content */
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+            color: var(--dark);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .page-header {
+            background-size: cover;
+            background-position: center;
+            align-items: center;
+            padding: 0 5%;
+            color: white;
+            text-align: center;
+            padding: 10rem 5% 5rem;
+            position: relative;
+        }
+
+        .bismillah {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        /* Navbar Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--white);
+            min-width: 200px;
+            box-shadow: var(--shadow-md);
+            z-index: 1001;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-content a {
+            color: var(--dark);
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(7, 146, 63, 0.1);
+            color: var(--primary);
+        }
+
+        .dropdown-content a i {
+            width: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .nav-greeting {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'admindashboard' %}" class="logo">
+            <img src="{% static 'logo.png' %}" alt="Masjid Al Hasanah">
+            <div class="logo-text">
+                <h2>Masjid Al Hasanah</h2>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="{% url 'admindashboard' %}">Dashboard</a>
+            <div class="dropdown">
+                <span class="nav-greeting">Events<i class="fas fa-chevron-down"></i></span>
+                <div class="dropdown-content">
+                    <a href="{% url 'admincreateevent' %}"><i class="fas fa-user"></i> Create Event</a>
+                    <a href="{% url 'eventadmin' %}"><i class="fas fa-sign-out-alt"></i> Manage Event</a>
+                </div>
+            </div>
+            <a href="{% url 'adminreport' %}">Reports</a>
+            <a href="{% url 'adminaccount' %}">Account</a>
+            <a href="{% url 'adminfeedback' %}">Feedback</a>
+            {% if adminusername %}
+            <span class="nav-greeting">Welcome, {{ adminusername }}</span>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>View Registration Details</h1>
+            <p>Registration ID: {{ registration.registration_id }}</p>
+        </div>
+    </header>
+
+    <!-- Registration Form -->
+    <div class="container">
+        <div class="registration-container">
+            <!-- Event Info -->
+             
+            <div class="event-info">
+                <h3>RSVP</h3>
+                <h2>{{ event.eventname }}</h2>
+                <div class="event-meta">
+                    <div class="event-meta-item">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>{{ event.eventdate|date:"F d, Y" }}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <i class="far fa-clock"></i>
+                        <span>{{ event.eventtime|time:"h:i A" }}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ event.eventlocation }}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>RM {{ event.fee|default_if_none:"0.00" }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Registration Form -->
+            <div class="registration-form">
+                <form method="post" enctype="multipart/form-data" id="registrationForm">
+                    {% csrf_token %}
+                    <h3 class="mb-4">Registration Details</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label required-field">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required value="{{ registration.full_name }}" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label required-field">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required value="{{ registration.email }}" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label required-field">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required value="{{ registration.phone }}" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ic_number" class="form-label required-field">IC/Passport Number</label>
+                            <input type="text" class="form-control" id="ic_number" name="ic_number" required value="{{ registration.ic_number }}" disabled>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="address" class="form-label required-field">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="2" required disabled>{{ registration.address }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="rsvp_status" class="form-label required-field">Will you be attending?</label>
+                            <select class="form-select" id="rsvp_status" name="rsvp_status" required disabled>
+                                <option value="" disabled>Select an option</option>
+                                <option value="YES" {% if registration.rsvp_status == 'YES' %}selected{% endif %}>Yes, I will attend</option>
+                                <option value="NO" {% if registration.rsvp_status == 'NO' %}selected{% endif %}>No, I can't attend</option>
+                                <option value="MAYBE" {% if registration.rsvp_status == 'MAYBE' %}selected{% endif %}>Maybe, I'll confirm later</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="num_attendees" class="form-label">Number of Attendees</label>
+                            <input type="number" class="form-control" id="num_attendees" name="num_attendees" min="1" value="{{ registration.num_attendees }}" disabled>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="special_requirements" class="form-label">Special Requirements</label>
+                        <textarea class="form-control" id="special_requirements" name="special_requirements" rows="2" disabled>{{ registration.special_requirements }}</textarea>
+                    </div>
+                    <!-- Payment Section -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="fee" class="form-label">Event Fee (RM)</label>
+                            <input type="number" class="form-control" id="fee" name="fee" value="{{ event.fee }}" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="payment_method" class="form-label required-field">Payment Method</label>
+                            <select class="form-select" id="payment_method" name="payment_method" required disabled>
+                                <option value="" disabled>Select payment method</option>
+                                <option value="CASH" {% if registration.payment_reference == 'CASH' %}selected{% endif %}>Cash</option>
+                                <option value="ONLINE" {% if registration.payment_reference == 'ONLINE' %}selected{% endif %}>Online Transfer</option>
+                                <option value="CARD" {% if registration.payment_reference == 'CARD' %}selected{% endif %}>Credit/Debit Card</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="total_fee" class="form-label required-field">Total Fee Paid (RM)</label>
+                            <input type="number" class="form-control" id="total_fee" name="total_fee" step="0.01" min="0" value="{{ registration.payment_amount }}" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="paid_status" class="form-label required-field">Payment Status</label>
+                            <select class="form-select" id="paid_status" name="paid_status" required disabled>
+                                <option value="" disabled>Select status</option>
+                                <option value="PAID" {% if registration.payment_status == 'PAID' %}selected{% endif %}>Paid</option>
+                                <option value="NOT_PAID" {% if registration.payment_status == 'NOT_PAID' %}selected{% endif %}>Not Paid</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Feedback Section -->
+                    <div class="mb-4">
+                        <label for="feedback" class="form-label">Feedback</label>
+                        <textarea class="form-control" id="feedback" name="feedback" rows="2" disabled>{{ registration.feedback }}</textarea>
+                    </div>
+
+                    
+                </form>
+                
+                <a href="{% url 'adminregistration' event.eventid %}" class="back-link">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Event Registrations
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Registration Terms</h6>
+                    <p>1. By registering for this event, you agree to abide by all event rules and regulations.</p>
+                    <p>2. Registration is subject to approval by the event organizers.</p>
+                    <p>3. Personal information collected will be used for event administration purposes only.</p>
+                    <p>4. Cancellations must be made at least 48 hours before the event.</p>
+                    <p>5. The organizers reserve the right to make changes to the event program.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Masjid Al Hasanah is dedicated to serving the Muslim community through spiritual guidance, education, and community services.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="{% url 'admindashboard' %}">Dashboard</a>
+                <a href="{% url 'eventadmin' %}">Events</a>
+                <a href="{% url 'adminreport' %}">Reports</a>
+                <a href="{% url 'adminaccount' %}">Account</a>
+                <a href="{% url 'adminfeedback' %}">Feedback</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Persiaran Kemajuan, Seksyen 9, <br> 43650 Bandar Baru Bangi, Selangor.</p>
+                <p><i class="fas fa-phone"></i> +60 12-345 6789</p>
+                <p><i class="fas fa-envelope"></i> info@masjidalhasanah.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Masjid Al Hasanah. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editBtn = document.getElementById('editBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const form = document.getElementById('registrationForm');
+        const fields = form.querySelectorAll('input, textarea, select');
+        editBtn.addEventListener('click', function() {
+            fields.forEach(field => {
+                if (field.name !== 'fee') field.disabled = false;
+            });
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'inline-block';
+        });
+    });
+    </script>
+
+</body>
+</html>

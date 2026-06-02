@@ -1,0 +1,433 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Masjid Al Hasanah</title>
+    <meta name="description" content="Admin dashboard for Masjid Al Hasanah management system">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+    
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'indexadmin' %}" class="logo">
+                <img src="{% static 'logo.png' %}" alt="Masjid Al Hasanah">
+                <div class="logo-text">
+                    <h2>Masjid Al Hasanah</h2>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="#home" class="{% if request.resolver_match.url_name == 'indexadmin' %}active{% endif %}">Home</a>
+                <a href="{% url 'eventadmin' %}" class="{% if 'event' in request.resolver_match.url_name %}active{% endif %}">Events</a>
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="#contact">Contact</a>
+                <a href="{% url 'adminaccount' %}" class="btn btn-primary">
+                    <i class="fas fa-user-circle"></i> Account
+                </a>
+                {% if adminusername %}
+                    <span class="nav-greeting">Hello, {{ adminusername }}</span>
+                {% endif %}
+            </div>
+            <button class="menu-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Prayer Times Section -->
+    <div class="prayer-times-bar">
+        <div class="container">
+            <div class="prayer-times-container">
+                <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+                <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+                <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+                <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+                <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+                <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+                <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+                <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+                <!-- Duplicate for continuous scrolling -->
+                <div class="prayer-location">WAKTU SOLAT BAGI SEMENYIH,<br>SELANGOR</div>
+                <div class="prayer-time">IMSAK: <span>05:38 a.m.</span></div>
+                <div class="prayer-time">SUBUH: <span>05:48 a.m.</span></div>
+                <div class="prayer-time">SYURUK: <span>06:59 a.m.</span></div>
+                <div class="prayer-time">ZOHOR: <span>01:11 p.m.</span></div>
+                <div class="prayer-time">ASAR: <span>04:36 p.m.</span></div>
+                <div class="prayer-time">MAGHRIB: <span>07:19 p.m.</span></div>
+                <div class="prayer-time">ISYAK: <span>08:33 p.m.</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <main class="dashboard container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Dashboard Overview</h1>
+            <a href="{% url 'eventadmin' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Event
+            </a>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-value">{{ total_events|default:"0" }}</h3>
+                    <p class="stat-label">Total Events</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-value">{{ total_attendees|default:"0" }}</h3>
+                    <p class="stat-label">Total Attendees</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-value">{{ upcoming_events.count|default:"0" }}</h3>
+                    <p class="stat-label">Upcoming Events</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-value">{{ recent_events.count|default:"0" }}</h3>
+                    <p class="stat-label">Recent Events</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="far fa-calendar-alt"></i> Upcoming Events
+                </h2>
+                <a href="{% url 'eventadmin' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add Event
+                </a>
+            </div>
+            
+            {% if upcoming_events %}
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Location</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in upcoming_events %}
+                            <tr>
+                                <td>
+                                    <div class="event-name">
+                                        <i class="fas fa-calendar-day"></i>
+                                        <span>{{ event.eventname }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ event.eventdate|date:"M d, Y" }}</td>
+                                <td>{{ event.eventtime|time:"g:i A" }}</td>
+                                <td>{{ event.eventlocation }}</td>
+                                <td class="text-center">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'adminregistration' event.eventid %}" class="btn btn-sm btn-secondary" title="View Registrations">
+                                            <i class="fas fa-users"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-primary" title="Edit Event">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-danger" title="Delete Event">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="far fa-calendar-plus empty-icon"></i>
+                    <h3>No Upcoming Events</h3>
+                    <p>You don't have any upcoming events scheduled.</p>
+                    <a href="{% url 'eventadmin' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Your First Event
+                    </a>
+                </div>
+            {% endif %}
+        </section>
+
+        <!-- Recent Events -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="far fa-clock"></i> Recent Events
+                </h2>
+                <a href="{% url 'eventadmin' %}?filter=past" class="btn btn-outline">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            {% if recent_events %}
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Date</th>
+                                <th>Attendees</th>
+                                <th>Status</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in recent_events %}
+                            <tr>
+                                <td>{{ event.eventname }}</td>
+                                <td>{{ event.eventdate|date:"M d, Y" }}</td>
+                                <td>{{ event.registrations.count|default:"0" }}</td>
+                                <td>
+                                    <span class="status-badge {% if event.eventdate < now %}completed{% else %}upcoming{% endif %}">
+                                        {% if event.eventdate < now %}Completed{% else %}Upcoming{% endif %}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'adminregistration' event.eventid %}" class="btn btn-sm btn-secondary" title="View Registrations">
+                                            <i class="fas fa-users"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-primary" title="View Report">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="far fa-calendar-check empty-icon"></i>
+                    <h3>No Recent Events</h3>
+                    <p>Your recent events will appear here.</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; {% now "Y" %} Masjid Al Hasanah. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Simple JavaScript for any interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin dashboard loaded successfully');
+            
+            // Make tables more responsive with basic styling
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                table.classList.add('responsive-table');
+            });
+            
+            // Add click handlers for action buttons
+            document.querySelectorAll('.action-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const action = this.dataset.action;
+                    const eventId = this.closest('tr').dataset.eventId;
+                    
+                    if (action === 'view') {
+                        window.location.href = `/event/${eventId}`;
+                    } else if (action === 'edit') {
+                        window.location.href = `/edit-event/${eventId}`;
+                    } else if (action === 'delete') {
+                        if (confirm('Are you sure you want to delete this event?')) {
+                            // Add delete functionality here
+                            console.log('Deleting event:', eventId);
+                        }
+                    }
+                });
+            });
+            
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        /* Print styles */
+        @media print {
+            .navbar, .btn, .no-print {
+                display: none !important;
+            }
+            
+            body {
+                padding: 20px;
+                font-size: 12px;
+            }
+            
+            .stat-card {
+                break-inside: avoid;
+            }
+            
+            .section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* Additional styles for the dashboard */
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 5px 10px 5px 30px;
+            margin-left: 10px;
+        }
+
+        .dataTables_wrapper .dataTables_filter:before {
+            content: '\f002';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 20px;
+            top: 10px;
+            color: #6c757d;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border: none !important;
+            padding: 0.25rem 0.5rem;
+            margin: 0 2px;
+            border-radius: 4px;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: var(--primary) !important;
+            color: white !important;
+            border: none;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #e9ecef;
+            color: var(--dark) !important;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            padding: 10px 0;
+            color: #6c757d;
+        }
+
+        /* Activity Feed Styles */
+        .activity-feed {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            background: rgba(7, 146, 63, 0.03);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(7, 146, 63, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-message {
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .stats-cards {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .activity-icon {
+                margin-bottom: 0.75rem;
+            }
+        }
+    </style>
+</body>
+</html>
