@@ -18,7 +18,11 @@ class Event(models.Model):
     max_attendees = models.PositiveIntegerField(null=True)  # number of people who can attend
     contact_number = models.CharField(max_length=15, null=True)  # organizer's phone number
     fee = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)  # event fee
-    event_image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    # Change this in your models.py
+    event_image = models.URLField(
+        max_length=500, 
+        default="https://i.postimg.cc/your-default-mosque-placeholder.jpg"
+    )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='UPCOMING')
     updated_at = models.DateTimeField(auto_now=True)
 

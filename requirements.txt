@@ -1,8 +1,9 @@
-Django==5.1.2
-gunicorn==23.0.0
-whitenoise==6.7.0
-asgiref==3.8.1
-sqlparse==0.5.1
-tzdata==2024.2
-python-dotenv==1.0.0
-pillow
+certifi==2026.5.20
+charset-normalizer==3.4.7
+cloudinary==1.44.2
+django-cloudinary-storage==0.3.0
+idna==3.17
+pillow==12.2.0
+requests==2.34.2
+six==1.17.0
+urllib3==2.7.0
