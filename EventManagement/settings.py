@@ -38,14 +38,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 INSTALLED_APPS = [
+    # Remove 'django.contrib.staticfiles' from here if it is listed twice
+    'cloudinary_storage', 
+    'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'cloudinary_storage', 
-    'django.contrib.staticfiles',
     'cloudinary',
     'EventProject'
 ]
